@@ -123,7 +123,7 @@ const MonthlyRollover: React.FC = () => {
               <div key={product.id} className="product-preview">
                 <span>{product.name}</span>
                 <span>{product.code}</span>
-                <span>₺{product.salePrice}</span>
+                <span>₺{product.purchasePrice}</span>
               </div>
             ))}
             {unsoldProducts.length > 5 && (

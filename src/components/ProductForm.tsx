@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Product } from '../types';
-import { generateProductCode, calculateNetProfit, getCurrentMonthYear } from '../utils/productUtils';
+import { generateProductCode, getCurrentMonthYear } from '../utils/productUtils';
 import { db } from '../utils/database';
 
 interface ProductFormProps {

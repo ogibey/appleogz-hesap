@@ -121,7 +121,7 @@ const StockList: React.FC = () => {
               <div className="product-details">
                 <p><strong>Kod:</strong> {product.code}</p>
                 <p><strong>Alış:</strong> ₺{product.purchasePrice}</p>
-                <p><strong>Satış:</strong> ₺{product.salePrice}</p>
+                <p><strong>Adet:</strong> {product.quantity}</p>
                 <p><strong>Ay:</strong> {product.monthYear}</p>
                 <p><strong>Eklenme:</strong> {new Date(product.createdAt).toLocaleDateString('tr-TR')}</p>
               </div>

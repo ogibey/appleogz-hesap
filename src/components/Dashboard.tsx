@@ -34,9 +34,6 @@ const Dashboard: React.FC = () => {
       // Satılan ürünler
       const soldProducts = allProducts.filter(p => p.isSold);
       
-      // Bu ay satılan ürünler
-      const monthlySoldProducts = soldProducts.filter(p => p.monthYear === currentMonth);
-      
       // Stok değeri (alış fiyatları toplamı)
       const stockValue = stockProducts.reduce((sum, p) => sum + (p.purchasePrice * p.quantity), 0);
       

@@ -127,7 +127,7 @@ const SaleForm: React.FC<SaleFormProps> = ({ onSaleCompleted }) => {
             <option value="">Ürün seçin...</option>
             {availableProducts.map(product => (
               <option key={product.id} value={product.id}>
-                {product.name} - {product.code} (₺{product.salePrice})
+                {product.name} - {product.code} (₺{product.purchasePrice})
               </option>
             ))}
           </select>
