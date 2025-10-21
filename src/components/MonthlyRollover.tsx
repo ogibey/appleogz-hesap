@@ -23,7 +23,8 @@ const MonthlyRollover: React.FC = () => {
       setNextMonth(next);
 
       // Satılmamış ürünleri al
-      const unsold = await db.products.where('isSold').equals(0).toArray();
+      const allProducts = await db.products.toArray();
+      const unsold = allProducts.filter(p => !p.isSold);
       setUnsoldProducts(unsold);
 
       // Son devir tarihini kontrol et
