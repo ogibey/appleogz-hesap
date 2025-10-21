@@ -43,7 +43,6 @@ const Dashboard: React.FC = () => {
       const netStockValue = stockValue - totalDebts;
       
       // Toplam kar (satışlardan gelen net kar)
-      const allSales = await db.sales.toArray();
       const totalProfit = allSales.reduce((sum, sale) => sum + sale.netProfit, 0);
       
       // Aylık kar (bu ay yapılan satışlar)
