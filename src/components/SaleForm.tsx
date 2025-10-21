@@ -26,7 +26,7 @@ const SaleForm: React.FC<SaleFormProps> = ({ onSaleCompleted }) => {
 
   const loadAvailableProducts = async () => {
     try {
-      const products = await db.products.where('isSold').equals(false).toArray();
+      const products = await db.products.where('isSold').equals(0).toArray();
       setAvailableProducts(products);
     } catch (error) {
       setMessage('Ürünler yüklenirken hata oluştu!');
