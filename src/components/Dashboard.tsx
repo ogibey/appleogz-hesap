@@ -38,7 +38,12 @@ const Dashboard: React.FC = () => {
       const monthlySoldProducts = soldProducts.filter(p => p.monthYear === currentMonth);
       
       // Stok değeri (alış fiyatları toplamı)
-      const stockValue = stockProducts.reduce((sum, p) => sum + p.purchasePrice, 0);
+      const stockValue = stockProducts.reduce((sum, p) => sum + (p.purchasePrice * p.quantity), 0);
+      
+      // Borçları al ve stok değerinden düş
+      const allDebts = await db.debts.toArray();
+      const totalDebts = allDebts.reduce((sum, debt) => sum + debt.amount, 0);
+      const netStockValue = stockValue - totalDebts;
       
       // Toplam kar (satışlardan gelen net kar)
       const allSales = await db.sales.toArray();
@@ -66,7 +71,7 @@ const Dashboard: React.FC = () => {
       setStats({
         totalProducts: allProducts.length,
         soldProducts: soldProducts.length,
-        stockValue,
+        stockValue: netStockValue, // Borçlar düşülmüş stok değeri
         totalProfit,
         monthlyProfit
       });

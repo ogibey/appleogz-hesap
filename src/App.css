@@ -606,6 +606,160 @@ button:disabled {
   gap: 0.5rem;
 }
 
+/* Debts Manager */
+.debts-container, .product-edit-container {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+}
+
+.debts-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.debt-form {
+  background: #f5f5f7;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid #e5e5e7;
+  margin-bottom: 2rem;
+}
+
+.debt-form h3 {
+  color: #1d1d1f;
+  margin-bottom: 1rem;
+}
+
+.debts-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.debt-card {
+  background: #f5f5f7;
+  border: 1px solid #e5e5e7;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.2s;
+}
+
+.debt-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.debt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.debt-header h4 {
+  color: #1d1d1f;
+  font-size: 1.1rem;
+}
+
+.delete-button {
+  background: #ff3b30;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.delete-button:hover {
+  background: #d70015;
+}
+
+.debt-details p {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+  color: #86868b;
+}
+
+.debt-details strong {
+  color: #1d1d1f;
+}
+
+.no-debts {
+  text-align: center;
+  padding: 2rem;
+  color: #86868b;
+  background: #f5f5f7;
+  border-radius: 8px;
+}
+
+/* Product Edit */
+.edit-form {
+  background: #f5f5f7;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid #e5e5e7;
+  margin-bottom: 2rem;
+}
+
+.edit-form h3 {
+  color: #1d1d1f;
+  margin-bottom: 1rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.form-actions button {
+  flex: 1;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.edit-button {
+  background: #007aff;
+  color: white;
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.edit-button:hover {
+  background: #0056b3;
+  transform: translateY(-1px);
+}
+
+.edit-button:disabled {
+  background: #d2d2d7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.no-products {
+  text-align: center;
+  padding: 2rem;
+  color: #86868b;
+  background: #f5f5f7;
+  border-radius: 8px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .app-header {
@@ -631,5 +785,13 @@ button:disabled {
   
   .dashboard-sections {
     grid-template-columns: 1fr;
+  }
+  
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-actions {
+    flex-direction: column;
   }
 }

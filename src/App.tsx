@@ -6,9 +6,11 @@ import SaleForm from './components/SaleForm';
 import StockList from './components/StockList';
 import MonthlyRollover from './components/MonthlyRollover';
 import BackupRestore from './components/BackupRestore';
+import DebtsManager from './components/DebtsManager';
+import ProductEdit from './components/ProductEdit';
 import './App.css';
 
-type Page = 'dashboard' | 'add-product' | 'sale' | 'stock' | 'rollover' | 'backup';
+type Page = 'dashboard' | 'add-product' | 'sale' | 'stock' | 'rollover' | 'backup' | 'debts' | 'edit-product';
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -37,6 +39,10 @@ const App: React.FC = () => {
         return <MonthlyRollover />;
       case 'backup':
         return <BackupRestore />;
+      case 'debts':
+        return <DebtsManager />;
+      case 'edit-product':
+        return <ProductEdit />;
       default:
         return <Dashboard />;
     }
@@ -91,6 +97,18 @@ const App: React.FC = () => {
           onClick={() => setCurrentPage('backup')}
         >
           💾 Yedekleme
+        </button>
+        <button 
+          className={currentPage === 'debts' ? 'active' : ''}
+          onClick={() => setCurrentPage('debts')}
+        >
+          💳 Borçlar
+        </button>
+        <button 
+          className={currentPage === 'edit-product' ? 'active' : ''}
+          onClick={() => setCurrentPage('edit-product')}
+        >
+          ✏️ Ürün Düzenle
         </button>
       </nav>
 
