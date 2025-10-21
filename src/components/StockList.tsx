@@ -31,7 +31,7 @@ const StockList: React.FC = () => {
 
   const totalStockValue = products
     .filter(p => !p.isSold)
-    .reduce((sum, p) => sum + p.purchasePrice, 0);
+    .reduce((sum, p) => sum + (p.purchasePrice * p.quantity), 0);
 
   // Toplam kar hesaplama için satışları al
   const [totalProfit, setTotalProfit] = useState(0);

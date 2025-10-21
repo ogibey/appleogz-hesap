@@ -37,10 +37,9 @@ const Dashboard: React.FC = () => {
       // Stok değeri (alış fiyatları toplamı)
       const stockValue = stockProducts.reduce((sum, p) => sum + (p.purchasePrice * p.quantity), 0);
       
-      // Borçları al ve stok değerinden düş
+      // Borçları al (ayrı gösterim için)
       const allDebts = await db.debts.toArray();
       const totalDebts = allDebts.reduce((sum, debt) => sum + debt.amount, 0);
-      const netStockValue = stockValue - totalDebts;
       
       // Toplam kar (satışlardan gelen net kar)
       const totalProfit = allSales.reduce((sum, sale) => sum + sale.netProfit, 0);
@@ -67,7 +66,7 @@ const Dashboard: React.FC = () => {
       setStats({
         totalProducts: allProducts.length,
         soldProducts: soldProducts.length,
-        stockValue: netStockValue, // Borçlar düşülmüş stok değeri
+        stockValue: stockValue, // Gerçek stok değeri
         totalProfit,
         monthlyProfit
       });
