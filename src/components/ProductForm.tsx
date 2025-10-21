@@ -11,7 +11,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onProductAdded }) => {
   const [formData, setFormData] = useState({
     name: '',
     purchasePrice: '',
-    salePrice: ''
+    quantity: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState('');
@@ -23,9 +23,9 @@ const ProductForm: React.FC<ProductFormProps> = ({ onProductAdded }) => {
 
     try {
       const purchasePrice = parseFloat(formData.purchasePrice);
-      const salePrice = parseFloat(formData.salePrice);
+      const quantity = parseInt(formData.quantity);
 
-      if (isNaN(purchasePrice) || isNaN(salePrice)) {
+      if (isNaN(purchasePrice) || isNaN(quantity) || quantity <= 0) {
         setMessage('Lütfen geçerli sayılar girin!');
         return;
       }
@@ -36,7 +36,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onProductAdded }) => {
       const product: Omit<Product, 'id'> = {
         name: formData.name,
         purchasePrice,
-        salePrice,
+        quantity,
         code,
         isSold: false,
         createdAt: new Date(),
@@ -46,7 +46,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onProductAdded }) => {
       await db.products.add(product);
       
       setMessage(`Ürün başarıyla eklendi! Kod: ${code}`);
-      setFormData({ name: '', purchasePrice: '', salePrice: '' });
+      setFormData({ name: '', purchasePrice: '', quantity: '' });
       onProductAdded();
     } catch (error) {
       setMessage('Hata oluştu: ' + (error as Error).message);
@@ -91,15 +91,15 @@ const ProductForm: React.FC<ProductFormProps> = ({ onProductAdded }) => {
 
 
         <div className="form-group">
-          <label>Satış Fiyatı (₺):</label>
+          <label>Adet:</label>
           <input
             type="number"
-            name="salePrice"
-            value={formData.salePrice}
+            name="quantity"
+            value={formData.quantity}
             onChange={handleChange}
             required
-            step="0.01"
-            placeholder="0.00"
+            min="1"
+            placeholder="1"
           />
         </div>
 

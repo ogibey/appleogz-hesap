@@ -13,7 +13,9 @@ const SaleForm: React.FC<SaleFormProps> = ({ onSaleCompleted }) => {
     customerName: '',
     imei: '',
     saleDate: new Date().toISOString().split('T')[0],
-    cost: ''
+    salePrice: '',
+    cost: '',
+    quantity: '1'
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState('');
@@ -48,33 +50,49 @@ const SaleForm: React.FC<SaleFormProps> = ({ onSaleCompleted }) => {
         return;
       }
 
+      const salePrice = parseFloat(formData.salePrice);
       const cost = parseFloat(formData.cost);
-      if (isNaN(cost)) {
-        setMessage('Lütfen geçerli bir maliyet girin!');
+      const quantity = parseInt(formData.quantity);
+
+      if (isNaN(salePrice) || isNaN(cost) || isNaN(quantity) || quantity <= 0) {
+        setMessage('Lütfen geçerli sayılar girin!');
         return;
       }
 
-      const netProfit = product.salePrice - (product.purchasePrice + cost);
+      if (quantity > product.quantity) {
+        setMessage(`Stokta sadece ${product.quantity} adet var!`);
+        return;
+      }
+
+      const netProfit = salePrice - (product.purchasePrice + cost);
 
       const sale: Omit<Sale, 'id'> = {
         productId: selectedProductId as number,
         customerName: formData.customerName,
         saleDate: new Date(formData.saleDate),
         imei: formData.imei,
-        salePrice: product.salePrice,
+        salePrice: salePrice,
         cost: cost,
         netProfit: netProfit,
+        quantity: quantity,
         createdAt: new Date()
       };
 
       // Satış kaydını ekle
       await db.sales.add(sale);
 
-      // Ürünü satıldı olarak işaretle
-      await db.products.update(selectedProductId, { isSold: true });
+      // Ürün stok miktarını güncelle
+      const newQuantity = product.quantity - quantity;
+      if (newQuantity <= 0) {
+        // Stok bitti, ürünü satıldı olarak işaretle
+        await db.products.update(selectedProductId, { isSold: true, quantity: 0 });
+      } else {
+        // Stok güncelle
+        await db.products.update(selectedProductId, { quantity: newQuantity });
+      }
 
       setMessage(`Satış başarıyla tamamlandı! Müşteri: ${formData.customerName}`);
-      setFormData({ customerName: '', imei: '', saleDate: new Date().toISOString().split('T')[0], cost: '' });
+      setFormData({ customerName: '', imei: '', saleDate: new Date().toISOString().split('T')[0], salePrice: '', cost: '', quantity: '1' });
       setSelectedProductId('');
       
       // Stok listesini yenile
@@ -121,7 +139,7 @@ const SaleForm: React.FC<SaleFormProps> = ({ onSaleCompleted }) => {
             <p><strong>Ad:</strong> {selectedProduct.name}</p>
             <p><strong>Kod:</strong> {selectedProduct.code}</p>
             <p><strong>Alış Fiyatı:</strong> ₺{selectedProduct.purchasePrice}</p>
-            <p><strong>Satış Fiyatı:</strong> ₺{selectedProduct.salePrice}</p>
+            <p><strong>Stokta:</strong> {selectedProduct.quantity} adet</p>
           </div>
         )}
 
@@ -138,6 +156,19 @@ const SaleForm: React.FC<SaleFormProps> = ({ onSaleCompleted }) => {
         </div>
 
         <div className="form-group">
+          <label>Satış Fiyatı (₺):</label>
+          <input
+            type="number"
+            name="salePrice"
+            value={formData.salePrice}
+            onChange={handleChange}
+            required
+            step="0.01"
+            placeholder="0.00"
+          />
+        </div>
+
+        <div className="form-group">
           <label>Maliyet (₺):</label>
           <input
             type="number"
@@ -147,6 +178,19 @@ const SaleForm: React.FC<SaleFormProps> = ({ onSaleCompleted }) => {
             required
             step="0.01"
             placeholder="Kargo + aksesuar"
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Satılan Adet:</label>
+          <input
+            type="number"
+            name="quantity"
+            value={formData.quantity}
+            onChange={handleChange}
+            required
+            min="1"
+            placeholder="1"
           />
         </div>
 
