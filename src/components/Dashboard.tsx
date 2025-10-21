@@ -38,7 +38,7 @@ const Dashboard: React.FC = () => {
       const stockValue = stockProducts.reduce((sum, p) => sum + (p.purchasePrice * p.quantity), 0);
       
       // Borçları al (ayrı gösterim için)
-      const allDebts = await db.debts.toArray();
+      // const allDebts = await db.debts.toArray();
       
       // Toplam kar (satışlardan gelen net kar)
       const totalProfit = allSales.reduce((sum, sale) => sum + sale.netProfit, 0);
