@@ -11,7 +11,6 @@ const ProductForm: React.FC<ProductFormProps> = ({ onProductAdded }) => {
   const [formData, setFormData] = useState({
     name: '',
     purchasePrice: '',
-    cost: '',
     salePrice: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -24,24 +23,20 @@ const ProductForm: React.FC<ProductFormProps> = ({ onProductAdded }) => {
 
     try {
       const purchasePrice = parseFloat(formData.purchasePrice);
-      const cost = parseFloat(formData.cost);
       const salePrice = parseFloat(formData.salePrice);
 
-      if (isNaN(purchasePrice) || isNaN(cost) || isNaN(salePrice)) {
+      if (isNaN(purchasePrice) || isNaN(salePrice)) {
         setMessage('Lütfen geçerli sayılar girin!');
         return;
       }
 
-      const netProfit = calculateNetProfit(salePrice, purchasePrice, cost);
       const monthYear = getCurrentMonthYear();
       const code = generateProductCode(monthYear);
 
       const product: Omit<Product, 'id'> = {
         name: formData.name,
         purchasePrice,
-        cost,
         salePrice,
-        netProfit,
         code,
         isSold: false,
         createdAt: new Date(),
@@ -51,7 +46,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onProductAdded }) => {
       await db.products.add(product);
       
       setMessage(`Ürün başarıyla eklendi! Kod: ${code}`);
-      setFormData({ name: '', purchasePrice: '', cost: '', salePrice: '' });
+      setFormData({ name: '', purchasePrice: '', salePrice: '' });
       onProductAdded();
     } catch (error) {
       setMessage('Hata oluştu: ' + (error as Error).message);
@@ -94,18 +89,6 @@ const ProductForm: React.FC<ProductFormProps> = ({ onProductAdded }) => {
           />
         </div>
 
-        <div className="form-group">
-          <label>Maliyet (₺):</label>
-          <input
-            type="number"
-            name="cost"
-            value={formData.cost}
-            onChange={handleChange}
-            required
-            step="0.01"
-            placeholder="Kargo + aksesuar"
-          />
-        </div>
 
         <div className="form-group">
           <label>Satış Fiyatı (₺):</label>
@@ -120,15 +103,6 @@ const ProductForm: React.FC<ProductFormProps> = ({ onProductAdded }) => {
           />
         </div>
 
-        {formData.salePrice && formData.purchasePrice && formData.cost && (
-          <div className="profit-preview">
-            <strong>Net Kar: ₺{calculateNetProfit(
-              parseFloat(formData.salePrice) || 0,
-              parseFloat(formData.purchasePrice) || 0,
-              parseFloat(formData.cost) || 0
-            ).toFixed(2)}</strong>
-          </div>
-        )}
 
         {message && (
           <div className={`message ${message.includes('başarıyla') ? 'success' : 'error'}`}>

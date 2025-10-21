@@ -40,11 +40,17 @@ const Dashboard: React.FC = () => {
       // Stok değeri (alış fiyatları toplamı)
       const stockValue = stockProducts.reduce((sum, p) => sum + p.purchasePrice, 0);
       
-      // Toplam kar (satılan ürünlerin net karı)
-      const totalProfit = soldProducts.reduce((sum, p) => sum + p.netProfit, 0);
+      // Toplam kar (satışlardan gelen net kar)
+      const allSales = await db.sales.toArray();
+      const totalProfit = allSales.reduce((sum, sale) => sum + sale.netProfit, 0);
       
-      // Aylık kar
-      const monthlyProfit = monthlySoldProducts.reduce((sum, p) => sum + p.netProfit, 0);
+      // Aylık kar (bu ay yapılan satışlar)
+      const currentMonthSales = allSales.filter(sale => {
+        const saleDate = new Date(sale.saleDate);
+        const saleMonth = `${saleDate.getFullYear()}-${String(saleDate.getMonth() + 1).padStart(2, '0')}`;
+        return saleMonth === currentMonth;
+      });
+      const monthlyProfit = currentMonthSales.reduce((sum, sale) => sum + sale.netProfit, 0);
       
       // Son satışları al (ürün adı ile birlikte)
       const recentSalesWithProductNames = await Promise.all(

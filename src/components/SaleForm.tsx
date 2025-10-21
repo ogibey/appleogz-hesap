@@ -12,7 +12,8 @@ const SaleForm: React.FC<SaleFormProps> = ({ onSaleCompleted }) => {
   const [formData, setFormData] = useState({
     customerName: '',
     imei: '',
-    saleDate: new Date().toISOString().split('T')[0]
+    saleDate: new Date().toISOString().split('T')[0],
+    cost: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState('');
@@ -47,12 +48,22 @@ const SaleForm: React.FC<SaleFormProps> = ({ onSaleCompleted }) => {
         return;
       }
 
+      const cost = parseFloat(formData.cost);
+      if (isNaN(cost)) {
+        setMessage('Lütfen geçerli bir maliyet girin!');
+        return;
+      }
+
+      const netProfit = product.salePrice - (product.purchasePrice + cost);
+
       const sale: Omit<Sale, 'id'> = {
         productId: selectedProductId as number,
         customerName: formData.customerName,
         saleDate: new Date(formData.saleDate),
         imei: formData.imei,
         salePrice: product.salePrice,
+        cost: cost,
+        netProfit: netProfit,
         createdAt: new Date()
       };
 
@@ -63,7 +74,7 @@ const SaleForm: React.FC<SaleFormProps> = ({ onSaleCompleted }) => {
       await db.products.update(selectedProductId, { isSold: true });
 
       setMessage(`Satış başarıyla tamamlandı! Müşteri: ${formData.customerName}`);
-      setFormData({ customerName: '', imei: '', saleDate: new Date().toISOString().split('T')[0] });
+      setFormData({ customerName: '', imei: '', saleDate: new Date().toISOString().split('T')[0], cost: '' });
       setSelectedProductId('');
       
       // Stok listesini yenile
@@ -109,8 +120,8 @@ const SaleForm: React.FC<SaleFormProps> = ({ onSaleCompleted }) => {
             <h3>Seçilen Ürün:</h3>
             <p><strong>Ad:</strong> {selectedProduct.name}</p>
             <p><strong>Kod:</strong> {selectedProduct.code}</p>
+            <p><strong>Alış Fiyatı:</strong> ₺{selectedProduct.purchasePrice}</p>
             <p><strong>Satış Fiyatı:</strong> ₺{selectedProduct.salePrice}</p>
-            <p><strong>Net Kar:</strong> ₺{selectedProduct.netProfit}</p>
           </div>
         )}
 
@@ -123,6 +134,19 @@ const SaleForm: React.FC<SaleFormProps> = ({ onSaleCompleted }) => {
             onChange={handleChange}
             required
             placeholder="Müşteri adı soyadı"
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Maliyet (₺):</label>
+          <input
+            type="number"
+            name="cost"
+            value={formData.cost}
+            onChange={handleChange}
+            required
+            step="0.01"
+            placeholder="Kargo + aksesuar"
           />
         </div>
 

@@ -33,9 +33,21 @@ const StockList: React.FC = () => {
     .filter(p => !p.isSold)
     .reduce((sum, p) => sum + p.purchasePrice, 0);
 
-  const totalProfit = products
-    .filter(p => p.isSold)
-    .reduce((sum, p) => sum + p.netProfit, 0);
+  // Toplam kar hesaplama için satışları al
+  const [totalProfit, setTotalProfit] = useState(0);
+
+  useEffect(() => {
+    const loadSales = async () => {
+      try {
+        const sales = await db.sales.toArray();
+        const profit = sales.reduce((sum, sale) => sum + sale.netProfit, 0);
+        setTotalProfit(profit);
+      } catch (error) {
+        console.error('Satışlar yüklenirken hata:', error);
+      }
+    };
+    loadSales();
+  }, []);
 
   if (loading) {
     return <div className="loading">Yükleniyor...</div>;
@@ -109,9 +121,7 @@ const StockList: React.FC = () => {
               <div className="product-details">
                 <p><strong>Kod:</strong> {product.code}</p>
                 <p><strong>Alış:</strong> ₺{product.purchasePrice}</p>
-                <p><strong>Maliyet:</strong> ₺{product.cost}</p>
                 <p><strong>Satış:</strong> ₺{product.salePrice}</p>
-                <p><strong>Net Kar:</strong> ₺{product.netProfit}</p>
                 <p><strong>Ay:</strong> {product.monthYear}</p>
                 <p><strong>Eklenme:</strong> {new Date(product.createdAt).toLocaleDateString('tr-TR')}</p>
               </div>

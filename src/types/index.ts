@@ -2,8 +2,6 @@ export interface Product {
   id?: number;
   name: string;
   purchasePrice: number;
-  cost: number; // Kargo + aksesuar
-  netProfit: number; // Satış fiyatı - (Alış + Maliyet)
   code: string; // AOGZ-YYYYMM-XXXX formatında
   salePrice: number;
   isSold: boolean;
@@ -18,6 +16,8 @@ export interface Sale {
   saleDate: Date;
   imei: string;
   salePrice: number;
+  cost: number; // Kargo + aksesuar - satış sırasında girilir
+  netProfit: number; // Satış fiyatı - (Alış + Maliyet)
   createdAt: Date;
 }
 
