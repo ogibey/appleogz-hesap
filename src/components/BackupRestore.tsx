@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Product, Sale, MonthlyData } from '../types';
+import { Sale, MonthlyData } from '../types';
 import { db } from '../utils/database';
 
 const BackupRestore: React.FC = () => {

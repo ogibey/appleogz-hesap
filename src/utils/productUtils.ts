@@ -1,4 +1,4 @@
-import { Product } from '../types';
+// Product type is not used in this file
 
 // Otomatik kod üretimi: AOGZ-YYYYMM-XXXX
 export const generateProductCode = (monthYear: string): string => {

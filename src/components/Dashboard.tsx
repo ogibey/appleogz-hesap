@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Product, Sale, DashboardStats } from '../types';
+import { Sale, DashboardStats } from '../types';
 import { db } from '../utils/database';
 import { getCurrentMonthYear } from '../utils/productUtils';
 

@@ -58,8 +58,8 @@ const MonthlyRollover: React.FC = () => {
 
       // Mevcut ayı pasif yap
       const currentMonthData = await db.monthlyData.where('monthYear').equals(currentMonth).first();
-      if (currentMonthData) {
-        await db.monthlyData.update(currentMonthData.id!, { isActive: false });
+      if (currentMonthData && currentMonthData.id) {
+        await db.monthlyData.update(currentMonthData.id, { isActive: false });
       }
 
       // Satılmamış ürünleri yeni aya devret
