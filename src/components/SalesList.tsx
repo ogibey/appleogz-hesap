@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sale, Product, Accessory } from '../types';
+import { Sale } from '../types';
 import { db } from '../utils/database';
 
 const SalesList: React.FC = () => {

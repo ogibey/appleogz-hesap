@@ -258,7 +258,7 @@ const SaleForm: React.FC<SaleFormProps> = ({ onSaleCompleted }) => {
                       <button
                         type="button"
                         onClick={() => {
-                          if (selectedQuantity > 0) {
+                          if (selectedQuantity > 0 && accessory.id) {
                             const updated = selectedAccessories.map(s =>
                               s.accessoryId === accessory.id
                                 ? { ...s, quantity: s.quantity - 1 }
@@ -267,7 +267,7 @@ const SaleForm: React.FC<SaleFormProps> = ({ onSaleCompleted }) => {
                             setSelectedAccessories(updated);
                           }
                         }}
-                        disabled={selectedQuantity === 0}
+                        disabled={selectedQuantity === 0 || !accessory.id}
                         className="quantity-button"
                       >
                         -
@@ -276,7 +276,7 @@ const SaleForm: React.FC<SaleFormProps> = ({ onSaleCompleted }) => {
                       <button
                         type="button"
                         onClick={() => {
-                          if (selectedQuantity < accessory.quantity) {
+                          if (selectedQuantity < accessory.quantity && accessory.id) {
                             const existing = selectedAccessories.find(s => s.accessoryId === accessory.id);
                             if (existing) {
                               setSelectedAccessories(
@@ -294,7 +294,7 @@ const SaleForm: React.FC<SaleFormProps> = ({ onSaleCompleted }) => {
                             }
                           }
                         }}
-                        disabled={selectedQuantity >= accessory.quantity}
+                        disabled={selectedQuantity >= accessory.quantity || !accessory.id}
                         className="quantity-button"
                       >
                         +
